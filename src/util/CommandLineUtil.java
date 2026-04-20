@@ -10,7 +10,7 @@ import exception.CommandLineParseException;
 
 public class CommandLineUtil {
   public static Command parse(String line) throws CommandLineParseException {
-    String[] parts = line.split(" ");
+    String[] parts = line.split(" +");
     String cmd = parts[0].toLowerCase();
     switch (cmd) {
       case "ls":
