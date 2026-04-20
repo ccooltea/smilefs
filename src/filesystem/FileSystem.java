@@ -20,7 +20,7 @@ public class FileSystem {
   }
 
   public static Node getNode(String path) {
-    String[] parts = PathUtil.split(PathUtil.normalize(path));
+    String[] parts = PathUtil.split(path);
     Node current = instance.root;
     for (String part : parts) {
       if (part.equals("/")) {
@@ -49,7 +49,7 @@ public class FileSystem {
   }
 
   public static List<String> list(String path) {
-    Node node = getNode(path);
+    Node node = getNode(PathUtil.normalize(path));
     if (node == null) {
       throw new NodeExistenceException("Node does not exist: " + path);
     }
@@ -62,7 +62,7 @@ public class FileSystem {
   }
 
   public static void addDirectory(String path) {
-    Node parent = getNode(PathUtil.getParent(path));
+    Node parent = getNode(PathUtil.getParent(PathUtil.normalize(path)));
     if (parent == null) {
       throw new NodeExistenceException("Parent node does not exist: " + path);
     }
@@ -79,7 +79,7 @@ public class FileSystem {
   }
 
   public static void addFile(String path, long size) {
-    Node parent = getNode(PathUtil.getParent(path));
+    Node parent = getNode(PathUtil.getParent(PathUtil.normalize(path)));
     if (parent == null) {
       throw new NodeExistenceException("Parent node does not exist: " + path);
     }
@@ -88,12 +88,18 @@ public class FileSystem {
     }
     DirectoryNode parentDir = (DirectoryNode) parent;
     String name = PathUtil.getName(path);
+    if (parentDir.hasChild(name)) {
+      Node child = parentDir.getChild(name);
+      if (child.getType() != NodeType.FILE) {
+        throw new NodeExistenceException("Directory already exists: " + path);
+      }
+    }
     FileNode file = new FileNode(getNextID(), name, parentDir, size);
     parentDir.addChild(file);
   }
 
   public static void addLink(String path, String targetPath) {
-    Node parent = getNode(PathUtil.getParent(path));
+    Node parent = getNode(PathUtil.getParent(PathUtil.normalize(path)));
     if (parent == null) {
       throw new NodeExistenceException("Parent node does not exist: " + path);
     }
@@ -105,12 +111,12 @@ public class FileSystem {
     if (parentDir.hasChild(name)) {
       throw new NodeExistenceException("Node with same name already exists: " + path);
     }
-    LinkNode link = new LinkNode(getNextID(), name, parentDir, targetPath);
+    LinkNode link = new LinkNode(getNextID(), name, parentDir, PathUtil.normalize(targetPath));
     parentDir.addChild(link);
   }
 
   public static void remove(String path) {
-    Node node = getNode(path);
+    Node node = getNode(PathUtil.normalize(path));
     if (node == null) {
       throw new NodeExistenceException("Node does not exist: " + path);
     }
@@ -127,7 +133,7 @@ public class FileSystem {
   }
 
   public static long sizeOf(String path) {
-    Node node = getNode(path);
+    Node node = getNode(PathUtil.normalize(path));
     if (node == null) {
       throw new NodeExistenceException("Node does not exist: " + path);
     }
@@ -149,7 +155,7 @@ public class FileSystem {
   }
 
   public static List<String> search(String path, String name) {
-    Node node = getNode(path);
+    Node node = getNode(PathUtil.normalize(path));
     if (node == null) {
       throw new NodeExistenceException("Node does not exist: " + path);
     }
