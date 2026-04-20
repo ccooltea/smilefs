@@ -2,6 +2,7 @@ package filesystem;
 
 import java.util.List;
 
+import exception.InvalidFileSizeException;
 import exception.InvalidPathException;
 import exception.NodeExistenceException;
 import exception.RemoveNonEmptyDirectoryException;
@@ -79,6 +80,9 @@ public class FileSystem {
   }
 
   public static void addFile(String path, long size) {
+    if (size < 0) {
+      throw new InvalidFileSizeException("Invalid file size" + size);
+    }
     Node parent = getNode(PathUtil.getParent(PathUtil.normalize(path)));
     if (parent == null) {
       throw new NodeExistenceException("Parent node does not exist: " + path);
