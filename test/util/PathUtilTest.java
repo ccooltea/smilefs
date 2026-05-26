@@ -50,9 +50,9 @@ public class PathUtilTest {
 
   @Test
   public void testNormalize1() {
-    String path = "./src/../test";
+    String path = "/src/../test";
     String normed = PathUtil.normalize(path);
-    assertEquals("src/test", normed);
+    assertEquals("/test", normed);
   }
 
   @Test
