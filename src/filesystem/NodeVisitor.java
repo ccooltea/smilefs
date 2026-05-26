@@ -5,15 +5,15 @@ public class NodeVisitor {
     node.accept(this);
   }
 
-  public void visit(FileNode node) {
+  public void visitFile(FileNode node) {
   }
 
-  public void visit(DirectoryNode node) {
+  public void visitDirectory(DirectoryNode node) {
     for (Node child : node.getChildrenNodes()) {
-      visit(child);
+      child.accept(this);
     }
   }
 
-  public void visit(LinkNode node) {
+  public void visitLink(LinkNode node) {
   }
 }

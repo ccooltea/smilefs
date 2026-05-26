@@ -26,6 +26,11 @@ public class DirectoryNode extends Node {
     return size;
   }
 
+  @Override
+  public void accept(NodeVisitor visitor) {
+    visitor.visitDirectory(this);
+  }
+
   public boolean hasChild(String name) {
     return children.containsKey(name);
   }

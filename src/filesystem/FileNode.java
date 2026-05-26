@@ -18,6 +18,11 @@ public class FileNode extends Node {
     return size;
   }
 
+  @Override
+  public void accept(NodeVisitor visitor) {
+    visitor.visitFile(this);
+  }
+
   public void setSize(long size) {
     this.size = size;
   }

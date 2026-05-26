@@ -20,9 +20,12 @@ public class LinkNode extends Node {
 
   @Override
   public long getSize() {
-    // return getLink().getSize();
-    // TODO: Solve cyclic getSize
     return 0;
+  }
+
+  @Override
+  public void accept(NodeVisitor visitor) {
+    visitor.visitLink(this);
   }
 
   public String getPath() {
