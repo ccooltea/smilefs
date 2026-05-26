@@ -1,6 +1,9 @@
 package test.util;
 
 import org.junit.Test;
+
+import exception.InvalidPathException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import util.PathUtil;
@@ -60,5 +63,47 @@ public class PathUtilTest {
     String path = "//usr/local//";
     String normed = PathUtil.normalize(path);
     assertEquals("/usr/local", normed);
+  }
+
+  @Test
+  public void testGetParent1() {
+    String path = "/usr/local";
+    assertEquals("/usr", PathUtil.getParent(path));
+  }
+
+  @Test
+  public void testGetParent2() {
+    String path = "/usr/";
+    assertEquals("/", PathUtil.getParent(path));
+  }
+
+  @Test
+  public void testGetParent3() {
+    String path = "/";
+    assertThrows(InvalidPathException.class, () -> PathUtil.getParent(path));
+  }
+
+  @Test
+  public void testGetName1() {
+    String path = "/usr/local";
+    assertEquals("local", PathUtil.getName(path));
+  }
+
+  @Test
+  public void testGetName2() {
+    String path = "/usr/";
+    assertEquals("usr", PathUtil.getName(path));
+  }
+
+  @Test
+  public void testGetName3() {
+    String path = "/";
+    assertEquals("/", PathUtil.getName(path));
+  }
+
+  @Test
+  public void testGetName4() {
+    String path = "";
+    assertThrows(InvalidPathException.class, () -> PathUtil.getName(path));
   }
 }
