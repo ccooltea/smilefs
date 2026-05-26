@@ -52,17 +52,25 @@ public class PathUtil {
     }
     if (lastSlash == path.length() - 1) {
       lastSlash = path.lastIndexOf(SEPARATOR, lastSlash - 1);
+      if (lastSlash < 0) {
+        throw new InvalidPathException("Invalid path: " + path);
+      }
     }
     return lastSlash == 0 ? SEPARATOR : path.substring(0, lastSlash);
   }
 
   public static String getName(String path) {
+    if (path.isEmpty())
+      throw new InvalidPathException("Invalid empty path");
     int lastSlash = path.lastIndexOf(SEPARATOR);
     if (lastSlash < 0) {
-      throw new InvalidPathException("Invalid path: " + path);
+      return path;
     }
     if (lastSlash == path.length() - 1) {
       lastSlash = path.lastIndexOf(SEPARATOR, lastSlash - 1);
+      if (lastSlash < 0) {
+        return path.length() == 1 ? path : path.substring(0, path.length() - 1);
+      }
       return path.substring(lastSlash + 1, path.length() - 1);
     }
     return path.substring(lastSlash + 1);
