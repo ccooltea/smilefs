@@ -13,4 +13,8 @@ public class MakeDirectoryCommand implements Command {
   public void execute() {
     FileSystem.addDirectory(path);
   }
+
+  public String getPath() {
+    return path;
+  }
 }

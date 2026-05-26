@@ -15,4 +15,12 @@ public class TouchCommand implements Command {
   public void execute() {
     FileSystem.addFile(path, size);
   }
+
+  public String getPath() {
+    return path;
+  }
+
+  public long getSize() {
+    return size;
+  }
 }

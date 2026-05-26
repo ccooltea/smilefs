@@ -13,4 +13,8 @@ public class RemoveCommand implements Command {
   public void execute() {
     FileSystem.remove(path);
   }
+
+  public String getPath() {
+    return path;
+  }
 }

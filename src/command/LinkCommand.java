@@ -15,4 +15,12 @@ public class LinkCommand implements Command {
   public void execute() {
     FileSystem.addLink(targetPath, sourcePath);
   }
+
+  public String getSourcePath() {
+    return sourcePath;
+  }
+
+  public String getTargetPath() {
+    return targetPath;
+  }
 }

@@ -18,4 +18,8 @@ public class ListCommand implements Command {
       System.out.println(item);
     }
   }
+
+  public String getPath() {
+    return path;
+  }
 }

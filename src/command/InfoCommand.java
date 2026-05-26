@@ -14,4 +14,8 @@ public class InfoCommand implements Command {
     long size = FileSystem.sizeOf(path);
     System.out.println(size);
   }
+
+  public String getPath() {
+    return path;
+  }
 }

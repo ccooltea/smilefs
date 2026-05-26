@@ -20,4 +20,12 @@ public class FindCommand implements Command {
       System.out.println(p);
     }
   }
+
+  public String getPath() {
+    return path;
+  }
+
+  public String getName() {
+    return name;
+  }
 }
