@@ -125,6 +125,9 @@ public class FileSystem {
       throw new NodeExistenceException("Node does not exist: " + path);
     }
     DirectoryNode parentDir = (DirectoryNode) node.getParent();
+    if (parentDir == null) {
+      throw new InvalidPathException("Cannot remove root directory");
+    }
     if (node.getType() == NodeType.FILE || node.getType() == NodeType.LINK) {
       parentDir.removeChild(node.getName());
     } else {
@@ -141,7 +144,9 @@ public class FileSystem {
     if (node == null) {
       throw new NodeExistenceException("Node does not exist: " + path);
     }
-    return node.getSize();
+    SizeVisitor visitor = new SizeVisitor();
+    node.accept(visitor);
+    return visitor.getSize();
   }
 
   private static List<String> search(Node node, String name, String currentPath) {
