@@ -66,6 +66,13 @@ public class PathUtilTest {
   }
 
   @Test
+  public void testNormalize3() {
+    String path = "/a//b/./c/../";
+    String normed = PathUtil.normalize(path);
+    assertEquals("/a/b", normed);
+  }
+
+  @Test
   public void testGetParent1() {
     String path = "/usr/local";
     assertEquals("/usr", PathUtil.getParent(path));
