@@ -248,6 +248,17 @@ public class FileSystemTest {
   }
 
   @Test
+  public void testSearchLinkToDirectory() {
+    FileSystem.addDirectory("/testSearchDirectoryLinkTarget");
+    FileSystem.addFile("/testSearchDirectoryLinkTarget/target.txt", 10);
+    FileSystem.addLink("/testSearchDirectoryLink", "/testSearchDirectoryLinkTarget");
+
+    List<String> res = FileSystem.search("/testSearchDirectoryLink", "target.txt");
+    assertEquals(1, res.size());
+    assertEquals("/testSearchDirectoryLink/target.txt", res.getFirst());
+  }
+
+  @Test
   public void testSearchInvalidPathNoOutput() {
     assertThrows(InvalidPathException.class, () -> FileSystem.search("/testSearchMissing", "anything"));
   }
