@@ -15,8 +15,6 @@ public abstract class Node {
 
   public abstract NodeType getType();
 
-  public abstract long getSize();
-
   public void accept(NodeVisitor visitor) {
     visitor.visit(this);
   }

@@ -13,7 +13,6 @@ public class FileNode extends Node {
     return NodeType.FILE;
   }
 
-  @Override
   public long getSize() {
     return size;
   }

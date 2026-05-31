@@ -18,15 +18,6 @@ public class DirectoryNode extends Node {
   }
 
   @Override
-  public long getSize() {
-    long size = 0;
-    for (Node child : children.values()) {
-      size += child.getSize();
-    }
-    return size;
-  }
-
-  @Override
   public void accept(NodeVisitor visitor) {
     visitor.visitDirectory(this);
   }

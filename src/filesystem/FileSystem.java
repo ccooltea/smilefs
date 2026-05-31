@@ -174,32 +174,14 @@ public class FileSystem {
     return visitor.getSize();
   }
 
-  private static List<String> search(Node node, String name, String currentPath) {
-    List<String> result = new java.util.ArrayList<>();
-    if (node.getName().equals(name)) {
-      result.add(currentPath);
-    }
-    if (node.getType() == NodeType.DIRECTORY) {
-      DirectoryNode dir = (DirectoryNode) node;
-      for (Node child : dir.getChildrenNodes()) {
-        result.addAll(search(child, name, PathUtil.join(currentPath, child.getName())));
-      }
-    }
-    return result;
-  }
-
   public static List<String> search(String path, String name) {
-    Node node = getNode(PathUtil.normalize(path));
+    String normedPath = PathUtil.normalize(path);
+    Node node = getNode(normedPath);
     if (node == null) {
       throw new InvalidPathException("Node does not exist: " + path);
     }
-    if (node.getType() == NodeType.FILE) {
-      if (node.getName().equals(name)) {
-        return List.of(node.getPath());
-      } else {
-        return List.of();
-      }
-    }
-    return search(node, name, path);
+    SearchVisitor visitor = new SearchVisitor(path.equals("/") ? path : PathUtil.getParent(normedPath), name);
+    node.accept(visitor);
+    return visitor.getResults();
   }
 }

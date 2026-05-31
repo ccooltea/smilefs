@@ -19,11 +19,6 @@ public class LinkNode extends Node {
   }
 
   @Override
-  public long getSize() {
-    return 0;
-  }
-
-  @Override
   public void accept(NodeVisitor visitor) {
     visitor.visitLink(this);
   }
