@@ -1,78 +1,51 @@
 package util;
 
+import java.nio.file.Path;
+
 import exception.InvalidPathException;
 
 public class PathUtil {
   public static final String SEPARATOR = "/";
-  public static final String SELF = ".";
-  public static final String PARENT = "..";
+
+  public static boolean isAbsolute(String path) {
+    Path p = Path.of(path);
+    return p.isAbsolute();
+  }
 
   public static String join(String... parts) {
-    if (parts.length > 0 && parts[0].equals(SEPARATOR)) {
-      parts[0] = "";
-    }
-    return String.join(SEPARATOR, parts);
+    Path p = Path.of(String.join(SEPARATOR, parts));
+    return p.toString();
   }
 
   public static String[] split(String path) {
-    if (path.equals(SEPARATOR)) {
-      return new String[] { SEPARATOR };
-    }
-    String[] parts = path.split(SEPARATOR);
-    if (parts.length > 0 && parts[0].isEmpty()) {
-      parts[0] = SEPARATOR;
+    Path p = Path.of(path);
+    String[] parts = new String[p.getNameCount()];
+    for (int i = 0; i < p.getNameCount(); ++i) {
+      parts[i] = p.getName(i).toString();
     }
     return parts;
   }
 
   public static String normalize(String path) {
-    String[] parts = path.split(SEPARATOR);
-    StringBuilder sb = new StringBuilder();
-    for (String part : parts) {
-      if (part.isEmpty() || part.equals(SELF)) {
-        continue;
-      } else if (part.equals(PARENT)) {
-        int lastSlash = sb.lastIndexOf(SEPARATOR);
-        if (lastSlash >= 0) {
-          sb.delete(lastSlash, sb.length());
-        } else {
-          throw new InvalidPathException("Invalid path: " + path);
-        }
-      } else {
-        sb.append(SEPARATOR).append(part);
-      }
-    }
-    return sb.length() == 0 ? SEPARATOR : sb.toString();
+    Path p = Path.of(path).normalize();
+    return p.toString();
   }
 
   public static String getParent(String path) {
-    int lastSlash = path.lastIndexOf(SEPARATOR);
-    if (lastSlash < 0) {
-      throw new InvalidPathException("Invalid path: " + path);
+    Path p = Path.of(path);
+    Path parent = p.getParent();
+    if (parent == null || parent.toString().isEmpty()) {
+      throw new InvalidPathException("No parent for path: " + path);
     }
-    if (lastSlash == path.length() - 1) {
-      lastSlash = path.lastIndexOf(SEPARATOR, lastSlash - 1);
-      if (lastSlash < 0) {
-        throw new InvalidPathException("Invalid path: " + path);
-      }
-    }
-    return lastSlash == 0 ? SEPARATOR : path.substring(0, lastSlash);
+    return parent.toString();
   }
 
   public static String getName(String path) {
-    if (path.isEmpty())
-      throw new InvalidPathException("Invalid empty path");
-    int lastSlash = path.lastIndexOf(SEPARATOR);
-    if (lastSlash < 0) {
-      return path;
+    Path p = Path.of(path);
+    Path name = p.getFileName();
+    if (name == null || name.toString().isEmpty()) {
+      throw new InvalidPathException("No name for path: " + path);
     }
-    if (lastSlash == path.length() - 1) {
-      lastSlash = path.lastIndexOf(SEPARATOR, lastSlash - 1);
-      if (lastSlash < 0) {
-        return path.length() == 1 ? path : path.substring(0, path.length() - 1);
-      }
-      return path.substring(lastSlash + 1, path.length() - 1);
-    }
-    return path.substring(lastSlash + 1);
+    return name.toString();
   }
 }

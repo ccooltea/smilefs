@@ -3,34 +3,26 @@ package filesystem;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.List;
+import java.nio.file.Path;
 import java.util.ArrayList;
 
 public class SearchVisitor extends NodeVisitor {
-  private StringBuilder path;
+  private Path path;
   private String name;
   private Set<Long> visited = new HashSet<>();
   private List<String> results = new ArrayList<>();
 
   public SearchVisitor(String path, String name) {
-    this.path = new StringBuilder(path);
+    this.path = Path.of(path).normalize();
     this.name = name;
   }
 
   private void pushPath(String name) {
-    if (path.length() > 1) {
-      path.append('/');
-    }
-    if (!name.equals("/")) {
-      path.append(name);
-    }
+    path = path.resolve(name);
   }
 
   private void popPath() {
-    int lastSlash = path.lastIndexOf("/");
-    path.delete(lastSlash, path.length());
-    if (path.isEmpty()) {
-      path.append('/');
-    }
+    path = path.getParent();
   }
 
   @Override
@@ -39,9 +31,7 @@ public class SearchVisitor extends NodeVisitor {
       return;
     visited.add(file.getId());
     if (file.getName().equals(name)) {
-      pushPath(file.getName());
       results.add(path.toString());
-      popPath();
     }
   }
 
@@ -50,11 +40,11 @@ public class SearchVisitor extends NodeVisitor {
     if (visited.contains(dir.getId()))
       return;
     visited.add(dir.getId());
-    pushPath(dir.getName());
     for (Node child : dir.getChildrenNodes()) {
+      pushPath(child.getName());
       child.accept(this);
+      popPath();
     }
-    popPath();
   }
 
   @Override
@@ -63,18 +53,14 @@ public class SearchVisitor extends NodeVisitor {
       return;
     visited.add(link.getId());
     if (link.getName().equals(name)) {
-      pushPath(link.getName());
       results.add(path.toString());
-      popPath();
     }
     Node target = link.getLink();
-    if (target != null) {
-      if (target.getType() == NodeType.DIRECTORY) {
-        DirectoryNode dir = (DirectoryNode) target;
-        pushPath(link.getName());
-        for (Node child : dir.getChildrenNodes()) {
-          child.accept(this);
-        }
+    if (target.getType() == NodeType.DIRECTORY) {
+      DirectoryNode dir = (DirectoryNode) target;
+      for (Node child : dir.getChildrenNodes()) {
+        pushPath(child.getName());
+        child.accept(this);
         popPath();
       }
     }

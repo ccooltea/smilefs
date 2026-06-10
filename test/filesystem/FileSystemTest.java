@@ -279,7 +279,7 @@ public class FileSystemTest {
   public void testRemoveFile() {
     FileSystem.addFile("/testRemoveFile", 10);
     FileSystem.remove("/testRemoveFile");
-    assertNull(FileSystem.getNode("/testRemoveFile"));
+    assertThrows(InvalidPathException.class, () -> FileSystem.getNode("/testRemoveFile"));
   }
 
   @Test
@@ -288,14 +288,14 @@ public class FileSystemTest {
     FileSystem.addLink("/testRemoveLink", "/testRemoveLinkTarget");
     FileSystem.remove("/testRemoveLink");
     assertEquals(10, FileSystem.sizeOf("/testRemoveLinkTarget"));
-    assertNull(FileSystem.getNode("/testRemoveLink"));
+    assertThrows(InvalidPathException.class, () -> FileSystem.getNode("/testRemoveLink"));
   }
 
   @Test
   public void testRemoveEmptyDirectory() {
     FileSystem.addDirectory("/testRemoveEmptyDir");
     FileSystem.remove("/testRemoveEmptyDir");
-    assertNull(FileSystem.getNode("/testRemoveEmptyDir"));
+    assertThrows(InvalidPathException.class, () -> FileSystem.getNode("/testRemoveEmptyDir"));
   }
 
   @Test

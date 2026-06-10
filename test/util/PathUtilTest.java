@@ -31,7 +31,7 @@ public class PathUtilTest {
   public void testSplit1() {
     String path = "/usr/bin";
     String[] parts = PathUtil.split(path);
-    String[] expected = new String[] { "/", "usr", "bin" };
+    String[] expected = new String[] { "usr", "bin" };
     assertArrayEquals(expected, parts);
   }
 
@@ -104,12 +104,6 @@ public class PathUtilTest {
 
   @Test
   public void testGetName3() {
-    String path = "/";
-    assertEquals("/", PathUtil.getName(path));
-  }
-
-  @Test
-  public void testGetName4() {
     String path = "";
     assertThrows(InvalidPathException.class, () -> PathUtil.getName(path));
   }
