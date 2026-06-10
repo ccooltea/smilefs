@@ -6,11 +6,11 @@ import java.util.Set;
 import exception.CyclicLinkException;
 
 public class LinkNode extends Node {
-  private String path;
+  private String target;
 
-  public LinkNode(long id, String name, Node parent, String path) {
+  public LinkNode(long id, String name, Node parent, String target) {
     super(id, name, parent);
-    this.path = path;
+    this.target = target;
   }
 
   @Override
@@ -23,12 +23,12 @@ public class LinkNode extends Node {
     visitor.visitLink(this);
   }
 
-  public String getPath() {
-    return path;
+  public String getTarget() {
+    return target;
   }
 
-  public void setPath(String path) {
-    this.path = path;
+  public void setTarget(String target) {
+    this.target = target;
   }
 
   public Node getLink() {
@@ -46,6 +46,6 @@ public class LinkNode extends Node {
   }
 
   public Node getDirectLink() {
-    return FileSystem.getNode(path);
+    return FileSystem.getNode(target);
   }
 }

@@ -62,6 +62,11 @@ public class SearchVisitor extends NodeVisitor {
     if (visited.contains(link.getId()))
       return;
     visited.add(link.getId());
+    if (link.getName().equals(name)) {
+      pushPath(link.getName());
+      results.add(path.toString());
+      popPath();
+    }
     Node target = link.getLink();
     if (target != null) {
       if (target.getType() == NodeType.DIRECTORY) {
@@ -71,12 +76,6 @@ public class SearchVisitor extends NodeVisitor {
           child.accept(this);
         }
         popPath();
-      } else {
-        if (link.getName().equals(name)) {
-          pushPath(link.getName());
-          results.add(path.toString());
-          popPath();
-        }
       }
     }
   }

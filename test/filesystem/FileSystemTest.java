@@ -244,7 +244,7 @@ public class FileSystemTest {
 
     List<String> res = FileSystem.search("/", "target.txt");
     assertEquals(1, res.size());
-    assertEquals("/testSearchShared/target.txt", res.getFirst());
+    assertEquals("/testSearchLinkA/target.txt", res.getFirst());
   }
 
   @Test
@@ -256,6 +256,18 @@ public class FileSystemTest {
     List<String> res = FileSystem.search("/testSearchDirectoryLink", "target.txt");
     assertEquals(1, res.size());
     assertEquals("/testSearchDirectoryLink/target.txt", res.getFirst());
+  }
+
+  @Test
+  public void testSearchIncludeLinkToDirectory() {
+    FileSystem.addDirectory("/testSearchIncludeLinkTarget");
+    FileSystem.addFile("/testSearchIncludeLinkTarget/testSearchIncludeLink", 10);
+    FileSystem.addLink("/testSearchIncludeLink", "/testSearchIncludeLinkTarget");
+
+    List<String> res = FileSystem.search("/", "testSearchIncludeLink");
+    assertEquals(2, res.size());
+    assertArrayEquals(new String[] { "/testSearchIncludeLink", "/testSearchIncludeLink/testSearchIncludeLink" },
+        res.toArray());
   }
 
   @Test

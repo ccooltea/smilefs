@@ -33,7 +33,7 @@ public class FileSystem {
         LinkNode link = (LinkNode) current;
         current = link.getLink();
         if (current == null) {
-          throw new InvalidPathException("Link target does not exist: " + link.getPath());
+          throw new InvalidPathException("Link target does not exist: " + link.getTarget());
         }
       }
       if (current.getType() != NodeType.DIRECTORY) {
@@ -57,7 +57,7 @@ public class FileSystem {
       LinkNode link = (LinkNode) node;
       Node linkNode = link.getLink();
       if (linkNode == null) {
-        throw new InvalidPathException("Link target does not exist: " + link.getPath());
+        throw new InvalidPathException("Link target does not exist: " + link.getTarget());
       }
       if (linkNode.getType() == NodeType.DIRECTORY) {
         node = linkNode;
@@ -80,7 +80,7 @@ public class FileSystem {
       LinkNode link = (LinkNode) parent;
       parent = link.getLink();
       if (parent == null) {
-        throw new InvalidPathException("Link target does not exist: " + link.getPath());
+        throw new InvalidPathException("Link target does not exist: " + link.getTarget());
       }
     }
     if (parent.getType() == NodeType.FILE) {
@@ -107,7 +107,7 @@ public class FileSystem {
       LinkNode link = (LinkNode) parent;
       parent = link.getLink();
       if (parent == null) {
-        throw new InvalidPathException("Link target does not exist: " + link.getPath());
+        throw new InvalidPathException("Link target does not exist: " + link.getTarget());
       }
     }
     if (parent.getType() == NodeType.FILE) {
@@ -132,7 +132,7 @@ public class FileSystem {
       LinkNode link = (LinkNode) parent;
       parent = link.getLink();
       if (parent == null) {
-        throw new InvalidPathException("Link target does not exist: " + link.getPath());
+        throw new InvalidPathException("Link target does not exist: " + link.getTarget());
       }
     }
     if (parent.getType() == NodeType.FILE) {
